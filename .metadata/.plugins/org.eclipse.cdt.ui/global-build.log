@@ -1,0 +1,93 @@
+11:06:01 **** Incremental Build of configuration Debug for project OpenOOGL ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -std=c++0x -I"/home/rallion/Documents/learnOpenGL/C++/OpenOOGL/include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: OpenOOGL
+Invoking: GCC C++ Linker
+g++  -o "OpenOOGL"  ./src/ShaderProgram.o ./src/Util.o ./src/VertexArray.o ./src/glad.o  ./main.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: OpenOOGL
+ 
+11:06:07 **** Incremental Build of configuration Debug for project OpenOOGL ****
+make all 
+make: Nothing to be done for 'all'.
+18:45:13 **** Clean-only build of configuration Debug for project glSandbox ****
+make clean 
+rm -rf  ./glad.o ./main.o  ./main.d  ./glad.d  test2
+ 
+18:45:14 **** Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../glad.c
+Invoking: GCC C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"glad.d" -MT"glad.o" -o "glad.o" "../glad.c"
+Finished building: ../glad.c
+ 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+../main.cpp: In function ‘int main()’:
+../main.cpp:139:13: warning: unused variable ‘texCoords’ [-Wunused-variable]
+     GLfloat texCoords[] = {
+             ^
+Finished building: ../main.cpp
+ 
+Building file: ../stb_image.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"stb_image.d" -MT"stb_image.o" -o "stb_image.o" "../stb_image.cpp"
+Finished building: ../stb_image.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+18:57:56 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+18:58:15 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+18:58:34 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+19:00:32 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+19:04:04 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+19:04:19 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+19:05:30 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.

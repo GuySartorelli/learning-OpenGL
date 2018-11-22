@@ -1,0 +1,263 @@
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <iostream>
+#include <cmath>
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+//#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
+
+int width = 800;
+int height = 600;
+const unsigned int FLOAT_SIZE = sizeof(GLfloat);
+std::string title = "Learn OpenGL";
+
+int main()
+{
+    //Initialise and configure GLFW
+    //-----------------------------
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    #ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //Mac OSX requires this line
+    #endif
+
+    //GLFW window creation
+    //-----------------------------
+    GLFWwindow* window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    if (window == NULL){
+        std::cout << "Failed to initiate GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+    //glViewport(0, 0, width, height);
+    //this will allow the viewport to be set every time the window is resized
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+
+    //GLAD defines our GL functions and points them to the right place
+    //glfwGetProcAddress will tell glad where the appropriate pointer
+    //  are for the OS for which we're compiling
+    //------------------------------
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+        std::cout << "Failed to initialise GLAD" << std::endl;
+        return -1;
+    }
+
+    //GET SHADERS FROM FILES
+    //----------------------
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    std::string vShaderSource;
+    std::ifstream vShaderFile;
+    vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    std::string fShaderSource;
+    std::ifstream fShaderFile;
+    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+    try{
+        //open files
+        vShaderFile.open("vertShader.vs");
+        std::stringstream vShaderStream;
+        fShaderFile.open("fragShader.fs");
+        std::stringstream fShaderStream;
+        //read files into stream and close file
+        vShaderStream << vShaderFile.rdbuf();
+        vShaderFile.close();
+        fShaderStream << fShaderFile.rdbuf();
+        fShaderFile.close();
+        //read streams into strings
+        vShaderSource = vShaderStream.str();
+        fShaderSource = fShaderStream.str();
+    }
+    catch(std::ifstream::failure e){
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
+    }
+    //COMPILE SHADERS ON GPU
+    //----------------------
+    const char* vertexShaderSource = vShaderSource.c_str();
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); //send source to GPU
+    glCompileShader(vertexShader); //compile source on GPU
+    //check for compile errors
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success){
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "SHADER::VERTEX::COMPILE_ERROR\n" << infoLog << std::endl;
+    }
+    const char* fragmentShaderSource = fShaderSource.c_str();
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL); //send source to GPU
+    glCompileShader(fragmentShader); //compile source on GPU
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success){
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "SHADER::FRAGMENT::COMPILE_ERROR\n" << infoLog << std::endl;
+    }
+    //LINK SHADERS INTO SHADER PROGRAM
+    //--------------------------------
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    //check for link errors
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success){
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "SHADER::LINK_ERROR\n" << infoLog << std::endl;
+    }
+    //delete now unnecessary shaders
+    glDetachShader(shaderProgram, vertexShader);
+    glDetachShader(shaderProgram, fragmentShader);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    //DECLARE VERTICES AND SET VAO/EBO/VBO
+    //--------------------------------
+//    GLfloat vertices[] = {
+//     0.5f,  0.5f, 0.0f,  // 0: top right pos
+//     0.5f,  0.0f, 0.0f,  // 0: top right color
+//     0.5f, -0.5f, 0.0f,  // 1: bottom right pos
+//     0.0f,  0.5f, 0.0f,  // 1: bottom right color
+//    -0.5f, -0.5f, 0.0f,  // 2: bottom left pos
+//     0.5f,  0.0f, 0.5f,  // 2: bottom left color
+//    -0.5f,  0.5f, 0.0f,  // 3: top left pos
+//     1.0f,  1.0f, 1.0f   // 3: top left color
+//    };
+    GLfloat vertices[] = {
+       -0.5f, -0.5f, 0.0f, //lower-left
+        0.5f, -0.5f, 0.0f, //lower-right
+        0.0f,  0.5f, 0.0f  //top-center
+    };
+    GLfloat texCoords[] = {
+        0.0f, 0.0f, //lower-left
+        1.0f, 0.0f, //lower-right
+        0.5f, 1.0f  //top-center
+    };
+    GLuint indices[] = {  // note it goes clockwise!
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
+    };
+    GLuint VAO; //VAOs allow you to use multiple VBO, EBO, etc easily without re-defining how to interpret data
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    GLuint EBO; //allows us to determine by index which vertices to draw per triangle, saving space in vertex array
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); //actually passing the array to GPU
+
+    GLuint VBO; //stores the ID of the object, which is held in GPU memory.
+    glGenBuffers(1, &VBO); //passing by reference so it'll store it in our VBO variable
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //actually passing the array to GPU
+    //tell GL how to interpret vertex data using currently bound VBO
+    //  param1: location of attribute (in vert shader)
+    //  param2: size (num values) of attr (in this case vec3 so 3 values)
+    //  param3: type of data (vec uses floats)
+    //  param4: normalise bool. If true, all data not within 0 (or -1 for signed) to 1 will be mapped to those limits
+    //  param5: stride (num bytes between each vert attr set). Can be 0 if tightly packed.
+    //  param6: where attr data begins in buffer (by size, not index). Must be cast to void*
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * FLOAT_SIZE, (void*)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * FLOAT_SIZE, (void*)(3 * FLOAT_SIZE));
+    glEnableVertexAttribArray(0); //enables attribute at given position for currently bound VBO
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);//because VBO now 'stored' in VAO, we can unbind it safely
+
+    //Drawing loop
+    //---------------------------
+    glClearColor(0.2f, 0.5f, 0.5f, 0.1f);//set default bg color (GL_COLOR_BUFFER_BIT)
+
+
+    int texWidth, texHeight, texNrChannels;
+    unsigned int texture;
+    glGenTextures(1, &texture); //how many textures; shoves 'em in an array
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    //CHOOSE HOW TEXTURE APPEARS OUTSIDE OF UV (ST) RANGE
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); //also: GL_REPEAT(default), GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT); //NOTE: For GL_CLAMP_TO_BORDER it takes a 4th argument for color as 4d float array
+    //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT); for 3D textures
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //when scaling down an image to fit object, select nearest pixels to map to object
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //as above but scaling up, set to linear interpolation
+    //for above, nearest is sharper but pixelated and linear is smoother but blurry
+
+    /* _____________ MIPMAPS ____________
+     * GL_NEAREST_MIPMAP_NEAREST: takes the nearest mipmap to match the pixel size and uses nearest neighbor interpolation for texture sampling.
+     * GL_LINEAR_MIPMAP_NEAREST: takes the nearest mipmap level and samples using linear interpolation.
+     * GL_NEAREST_MIPMAP_LINEAR: linearly interpolates between the two mipmaps that most closely match the size of a pixel and samples via nearest neighbor interpolation.
+     * GL_LINEAR_MIPMAP_LINEAR: linearly interpolates between the two closest mipmaps and samples the texture via linear interpolation.
+     */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    //NOTE: Using a mipmap interpolation enum for the magnification filter will result in a GL_INVALID_ENUM error
+
+    unsigned char* texData = stbi_load("container.jpg", &texWidth, &texHeight, &texNrChannels, 0);
+    if (texData) {
+        //target (gltex2d), level of mipmap (in case you wanna do each level separately. Here 0 is "meh"), format for new mipmap, width 'n' height, always 0 (legacy), format and type of source
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData); // //now bound tex object (texture) has texData associated to it
+        glGenerateMipmap(GL_TEXTURE_2D); //generates all mipmap levels
+    }
+    stbi_image_free(texData); //no longer need raw image
+
+
+    while(!glfwWindowShouldClose(window)){
+
+        processInput(window); //do anything with input as appropriate
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear out previous buffer before drawing new one
+
+        float time = glfwGetTime();
+        float intensity = sin(time)*0.5f + 0.5f; // sin gives -1 to 1, so we remap it to 0 to 1
+        int intensityAttrLocation = glGetUniformLocation(shaderProgram, "intensity");
+
+        glUseProgram(shaderProgram); // < tell GL what shader(s) to use
+        glUniform1f(intensityAttrLocation, intensity); // setting uniforms requires a program to be "used"
+        glBindVertexArray(VAO); // < tell GL which verts to draw
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode. Default uses GL_FILL
+
+        //glDrawArrays denotes: using the shader and vertex data we previously defined, render triangles
+        //  starting at index 0 of that vertex data, using the number of vertices we have in the array.
+        //glDrawElements denotes: using the shader and vertex data we previously defined, render triangles
+        //  using the number of vertices we indicated in the indices array (indices of which are type GLuint),
+        //  starting at the nth index of the EBO (0th here)
+        //int numVertices = sizeof(vertices)/sizeof(vertices[0])/3;
+        //glDrawArrays(GL_TRIANGLES, 0, numVertices); IF NOT USING EBO.
+        //  Note: when using multiple attrs in one vert array, "sizeof(vertices[0])/3" must be amended
+        //  to reflect the number of attrs (3*numAttrs). EBO eliminates such convolution.
+        int numIndices = sizeof(indices)/sizeof(indices[0]);
+        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0); // this is the actual draw call
+
+        glfwSwapBuffers(window);
+
+        glfwPollEvents(); //check callbacks
+    }
+
+    //optionally delete unnecessary objects on GPU
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+
+    glfwTerminate();
+    return 0;
+}
+
+void framebufferSizeCallback(GLFWwindow* window, int width, int height){
+    //first two parameters indicate where on the window (here lower left corner)
+    //  we want the lower left corner of our viewport to be
+    //third 'n' fourth are size of the viewport
+    glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window){
+    //GLFW_PRESS if currently pressed down. GLFW_RELEASE if not.
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+        glfwSetWindowShouldClose(window, true);
+    }
+}

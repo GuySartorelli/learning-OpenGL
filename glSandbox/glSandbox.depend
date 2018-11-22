@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1533174048 source:/home/rallion/Documents/learnOpenGL/C++/test2/main.cpp
+	<string>
+	<sstream>
+	<fstream>
+	<iostream>
+	<cmath>
+	<glad/glad.h>
+	<GLFW/glfw3.h>
+
+1532567441 source:/home/rallion/Documents/learnOpenGL/C++/test2/glad.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<glad/glad.h>
+	<windows.h>
+	<winapifamily.h>
+	<dlfcn.h>
+
