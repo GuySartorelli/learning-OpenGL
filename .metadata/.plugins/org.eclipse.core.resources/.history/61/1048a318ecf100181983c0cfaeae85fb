@@ -1,0 +1,13 @@
+#ifndef MYUTILS_H_
+#define MYUTILS_H_
+
+#include <string>
+
+bool endsWith(const std::string &mainString, const std::string &suffix){
+    return mainString.size() >= suffix.size() && mainString.compare(mainString.size() - suffix.size(), suffix.size(), suffix) == 0;
+}
+
+
+
+
+#endif /* MYUTILS_H_ */

@@ -8,9 +8,11 @@
 #include <GLFW/glfw3.h>
 //#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "myUtils.h"
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+GLuint makeTexture(std::string &file);
 
 int width = 800;
 int height = 600;
@@ -183,34 +185,11 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);//because VBO now 'stored' in VAO, we can unbind it safely
 
     //_______TEXTURES______
-    GLuint texture;
-    glGenTextures(1, &texture); //how many textures; shoves 'em in an array
-    glBindTexture(GL_TEXTURE_2D, texture);
-    //CHOOSE HOW TEXTURE APPEARS OUTSIDE OF UV (ST) RANGE
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); //also: GL_REPEAT(default), GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT); //NOTE: For GL_CLAMP_TO_BORDER it takes a 4th argument for color as 4d float array
-    //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT); for 3D textures
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //when scaling down an image to fit object, select nearest pixels to map to object
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //as above but scaling up, set to linear interpolation
-    //for above, nearest is sharper but pixelated and linear is smoother but blurry
+    std::string file = "container.jpg";
+    GLuint texture = makeTexture(file);
 
-    /* _____________ MIPMAPS ____________
-     * GL_NEAREST_MIPMAP_NEAREST: takes the nearest mipmap to match the pixel size and uses nearest neighbor interpolation for texture sampling.
-     * GL_LINEAR_MIPMAP_NEAREST: takes the nearest mipmap level and samples using linear interpolation.
-     * GL_NEAREST_MIPMAP_LINEAR: linearly interpolates between the two mipmaps that most closely match the size of a pixel and samples via nearest neighbor interpolation.
-     * GL_LINEAR_MIPMAP_LINEAR: linearly interpolates between the two closest mipmaps and samples the texture via linear interpolation.
-     */
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    //NOTE: Using a mipmap interpolation enum for the magnification filter will result in a GL_INVALID_ENUM error
-
-    int texWidth, texHeight, texNrChannels;
-    unsigned char* texData = stbi_load("container.jpg", &texWidth, &texHeight, &texNrChannels, 0);
-    if (texData) {
-        //target (gltex2d), level of mipmap (in case you wanna do each level separately. Here 0 is "meh"), format for new mipmap, width 'n' height, always 0 (legacy), format and type of source
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData); // //now bound tex object (texture) has texData associated to it
-        glGenerateMipmap(GL_TEXTURE_2D); //generates all mipmap levels
-    } else {std::cout << "failed to load texture image" << std::endl;}
-    stbi_image_free(texData); //no longer need raw image
+    std::string file2 = "awesomeface.png";
+    GLuint texture2 = makeTexture(file2);
 
 
     //Drawing loop
@@ -228,7 +207,14 @@ int main()
 
         glUseProgram(shaderProgram); // < tell GL what shader(s) to use
         glUniform1f(intensityAttrLocation, intensity); // setting uniforms requires a program to be "used"
+
+        glUniform1i(glGetUniformLocation(shaderProgram, "texture1"), 0); //this one isn't strictly necessary but may be a good idea?
+        glUniform1i(glGetUniformLocation(shaderProgram, "texture2"), 1);//need to do this when we're using more than one of 'em
+
+        glActiveTexture(GL_TEXTURE0); // activate a texture unit (default 0 active for some but not all drivers)
         glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
         glBindVertexArray(VAO); // < tell GL which verts to draw
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode. Default uses GL_FILL
 
@@ -256,6 +242,42 @@ int main()
 
     glfwTerminate();
     return 0;
+}
+
+GLuint makeTexture(std::string &file){
+    GLuint texture;
+    glGenTextures(1, &texture); //how many textures; shoves 'em in an array
+    glBindTexture(GL_TEXTURE_2D, texture);
+    //CHOOSE HOW TEXTURE APPEARS OUTSIDE OF UV (ST) RANGE
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); //also: GL_REPEAT(default), GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT); //NOTE: For GL_CLAMP_TO_BORDER it takes a 4th argument for color as 4d float array
+    //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT); for 3D textures
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //when scaling down an image to fit object, select nearest pixels to map to object
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //as above but scaling up, set to linear interpolation
+    //for above, nearest is sharper but pixelated and linear is smoother but blurry
+
+    /* _____________ MIPMAPS ____________
+     * GL_NEAREST_MIPMAP_NEAREST: takes the nearest mipmap to match the pixel size and uses nearest neighbor interpolation for texture sampling.
+     * GL_LINEAR_MIPMAP_NEAREST: takes the nearest mipmap level and samples using linear interpolation.
+     * GL_NEAREST_MIPMAP_LINEAR: linearly interpolates between the two mipmaps that most closely match the size of a pixel and samples via nearest neighbor interpolation.
+     * GL_LINEAR_MIPMAP_LINEAR: linearly interpolates between the two closest mipmaps and samples the texture via linear interpolation.
+     */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    //NOTE: Using a mipmap interpolation enum for the magnification filter will result in a GL_INVALID_ENUM error
+
+    int texWidth, texHeight, texNrChannels;
+    stbi_set_flip_vertically_on_load(true); // GL expects 0 on y to be at the bottom, but on images it tends to be the top
+    unsigned char* texData = stbi_load(file.c_str(), &texWidth, &texHeight, &texNrChannels, 0);
+    if (texData) {
+        //target (gltex2d), level of mipmap (in case you wanna do each level separately. Here 0 is "meh"), format for new mipmap, width 'n' height, always 0 (legacy), format and type of source
+        int colorSpace = (endsWith(file, ".png")) ? GL_RGBA : GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, colorSpace, GL_UNSIGNED_BYTE, texData); // //now bound tex object (texture) has texData associated to it
+        glGenerateMipmap(GL_TEXTURE_2D); //generates all mipmap levels
+
+    } else {std::cout << "failed to load texture image" << std::endl;}
+    stbi_image_free(texData); //no longer need raw image
+
+    return texture;
 }
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height){

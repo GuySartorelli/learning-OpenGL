@@ -1,6 +1,15 @@
-19:05:30 **** Incremental Build of configuration Debug for project glSandbox ****
+15:47:39 **** Incremental Build of configuration Debug for project glSandbox ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
 
-19:05:31 Build Finished (took 1s.184ms)
+15:47:41 Build Finished (took 2s.618ms)
 

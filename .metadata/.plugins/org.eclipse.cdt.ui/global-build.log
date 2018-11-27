@@ -91,3 +91,243 @@ make: Nothing to be done for 'all'.
 19:05:30 **** Incremental Build of configuration Debug for project glSandbox ****
 make all 
 make: Nothing to be done for 'all'.
+15:14:51 **** Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+../main.cpp: In function ‘int main()’:
+../main.cpp:187:38: error: ‘makeTexture’ was not declared in this scope
+     GLuint texture = makeTexture(file);
+                                      ^
+../main.cpp: In function ‘GLuint makeTexture(std::__cxx11::string&)’:
+../main.cpp:258:86: error: cannot convert ‘std::__cxx11::string {aka std::__cxx11::basic_string<char>}’ to ‘const char*’ for argument ‘1’ to ‘stbi_uc* stbi_load(const char*, int*, int*, int*, int)’
+     unsigned char* texData = stbi_load(file, &texWidth, &texHeight, &texNrChannels, 0);
+                                                                                      ^
+make: *** [main.o] Error 1
+subdir.mk:35: recipe for target 'main.o' failed
+15:15:43 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:18:01 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:18:23 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+15:19:25 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:29:58 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:32:47 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+In file included from ../main.cpp:11:0:
+../myUtils.h: In function ‘bool endsWith(const string&, const string&)’:
+../myUtils.h:8:108: error: invalid operands of types ‘int’ and ‘<unresolved overloaded function type>’ to binary ‘operator<<’
+     std::cout << mainString.compare(mainString.size() - suffix.size(), suffix.size(), suffix) == 0 << std::endl;
+                                                                                                            ^
+subdir.mk:35: recipe for target 'main.o' failed
+make: *** [main.o] Error 1
+15:33:42 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:34:32 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:35:31 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:36:02 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:36:24 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:37:30 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:37:55 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+15:38:09 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+15:38:24 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+15:38:35 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+15:39:55 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+15:42:11 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:42:41 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:44:53 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:45:06 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:45:39 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
+15:45:50 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+make: Nothing to be done for 'all'.
+15:47:39 **** Incremental Build of configuration Debug for project glSandbox ****
+make all 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: glSandbox
+Invoking: GCC C++ Linker
+g++  -o "glSandbox"  ./glad.o ./main.o ./stb_image.o   -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+Finished building target: glSandbox
+ 
